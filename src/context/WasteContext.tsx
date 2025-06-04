@@ -9,19 +9,11 @@ export interface WasteEntry {
   notes?: string;
   photo?: string;
   address: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
   timestamp: string;
   status: 'pending' | 'assigned' | 'collected';
   assignedTruck?: {
     truckNumber: string;
     driverName: string;
-    currentLocation: {
-      lat: number;
-      lng: number;
-    };
   };
 }
 
@@ -29,7 +21,7 @@ interface WasteContextType {
   wasteEntries: WasteEntry[];
   addWasteEntry: (entry: Omit<WasteEntry, 'id' | 'timestamp' | 'status'>) => void;
   assignTruck: (entryId: string, truckNumber: string, driverName: string) => void;
-  updateTruckLocation: (entryId: string, location: { lat: number; lng: number }) => void;
+  updateEntryStatus: (entryId: string, status: 'pending' | 'assigned' | 'collected') => void;
 }
 
 const WasteContext = createContext<WasteContextType | undefined>(undefined);
@@ -68,25 +60,16 @@ export const WasteProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             status: 'assigned' as const,
             assignedTruck: {
               truckNumber,
-              driverName,
-              currentLocation: entry.coordinates // Start at pickup location
+              driverName
             }
           }
         : entry
     ));
   };
 
-  const updateTruckLocation = (entryId: string, location: { lat: number; lng: number }) => {
+  const updateEntryStatus = (entryId: string, status: 'pending' | 'assigned' | 'collected') => {
     setWasteEntries(prev => prev.map(entry => 
-      entry.id === entryId && entry.assignedTruck
-        ? { 
-            ...entry,
-            assignedTruck: {
-              ...entry.assignedTruck,
-              currentLocation: location
-            }
-          }
-        : entry
+      entry.id === entryId ? { ...entry, status } : entry
     ));
   };
 
@@ -95,7 +78,7 @@ export const WasteProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       wasteEntries,
       addWasteEntry,
       assignTruck,
-      updateTruckLocation
+      updateEntryStatus
     }}>
       {children}
     </WasteContext.Provider>
