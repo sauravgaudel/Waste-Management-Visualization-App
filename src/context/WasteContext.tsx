@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export interface WasteEntry {
@@ -14,13 +13,14 @@ export interface WasteEntry {
   assignedTruck?: {
     truckNumber: string;
     driverName: string;
+    driverPhone: string;
   };
 }
 
 interface WasteContextType {
   wasteEntries: WasteEntry[];
   addWasteEntry: (entry: Omit<WasteEntry, 'id' | 'timestamp' | 'status'>) => void;
-  assignTruck: (entryId: string, truckNumber: string, driverName: string) => void;
+  assignTruck: (entryId: string, truckNumber: string, driverName: string, driverPhone: string) => void;
   updateEntryStatus: (entryId: string, status: 'pending' | 'assigned' | 'collected') => void;
 }
 
@@ -52,7 +52,7 @@ export const WasteProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setWasteEntries(prev => [...prev, newEntry]);
   };
 
-  const assignTruck = (entryId: string, truckNumber: string, driverName: string) => {
+  const assignTruck = (entryId: string, truckNumber: string, driverName: string, driverPhone: string) => {
     setWasteEntries(prev => prev.map(entry => 
       entry.id === entryId 
         ? { 
@@ -60,7 +60,8 @@ export const WasteProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             status: 'assigned' as const,
             assignedTruck: {
               truckNumber,
-              driverName
+              driverName,
+              driverPhone
             }
           }
         : entry

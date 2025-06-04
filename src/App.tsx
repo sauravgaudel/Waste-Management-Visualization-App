@@ -8,6 +8,7 @@ import { WasteProvider } from "./context/WasteContext";
 import Index from "./pages/Index";
 import UserDashboard from "./pages/UserDashboard";
 import MunicipalDashboard from "./pages/MunicipalDashboard";
+import DriverDashboard from "./pages/DriverDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/user-dashboard" element={<UserDashboard />} />
               <Route path="/municipal-dashboard" element={<MunicipalDashboard />} />
+              <Route path="/driver-dashboard" element={<DriverDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

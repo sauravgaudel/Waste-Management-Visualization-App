@@ -7,20 +7,21 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useWaste } from '../context/WasteContext';
 import { toast } from "@/hooks/use-toast";
-import { Truck, User, MapPin, Calendar, Weight } from 'lucide-react';
+import { Truck, User, MapPin, Calendar, Weight, Phone } from 'lucide-react';
 
 const TruckAssignment = () => {
   const { wasteEntries, assignTruck } = useWaste();
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
   const [truckNumber, setTruckNumber] = useState('');
   const [driverName, setDriverName] = useState('');
+  const [driverPhone, setDriverPhone] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const pendingEntries = wasteEntries.filter(entry => entry.status === 'pending');
   const assignedEntries = wasteEntries.filter(entry => entry.status === 'assigned');
 
   const handleAssignTruck = () => {
-    if (!selectedEntry || !truckNumber || !driverName) {
+    if (!selectedEntry || !truckNumber || !driverName || !driverPhone) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields.",
@@ -29,7 +30,7 @@ const TruckAssignment = () => {
       return;
     }
 
-    assignTruck(selectedEntry, truckNumber, driverName);
+    assignTruck(selectedEntry, truckNumber, driverName, driverPhone);
     
     toast({
       title: "Truck Assigned Successfully",
@@ -40,6 +41,7 @@ const TruckAssignment = () => {
     setSelectedEntry(null);
     setTruckNumber('');
     setDriverName('');
+    setDriverPhone('');
     setIsDialogOpen(false);
   };
 
@@ -134,6 +136,19 @@ const TruckAssignment = () => {
                             />
                           </div>
                         </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="driverPhone">Driver Phone Number</Label>
+                          <div className="relative">
+                            <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                            <Input
+                              id="driverPhone"
+                              placeholder="e.g., +1 (555) 123-4567"
+                              value={driverPhone}
+                              onChange={(e) => setDriverPhone(e.target.value)}
+                              className="pl-10"
+                            />
+                          </div>
+                        </div>
                         <Button onClick={handleAssignTruck} className="w-full">
                           Assign Truck
                         </Button>
@@ -147,7 +162,7 @@ const TruckAssignment = () => {
         </CardContent>
       </Card>
 
-      {/* Assigned Trucks */}
+      {/* Active Assignments */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -172,7 +187,7 @@ const TruckAssignment = () => {
                         Assigned
                       </span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-2 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <Truck className="h-4 w-4" />
                         Truck {entry.assignedTruck?.truckNumber}
@@ -180,6 +195,10 @@ const TruckAssignment = () => {
                       <div className="flex items-center gap-1">
                         <User className="h-4 w-4" />
                         {entry.assignedTruck?.driverName}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Phone className="h-4 w-4" />
+                        {entry.assignedTruck?.driverPhone}
                       </div>
                       <div className="flex items-center gap-1">
                         <Weight className="h-4 w-4" />
