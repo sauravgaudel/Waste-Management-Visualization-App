@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Users, Building2, Recycle, MapPin } from "lucide-react";
+import { Users, Building2, Recycle, MapPin, Truck } from "lucide-react";
 
 const Index = () => {
   return (
@@ -22,7 +22,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <Card className="hover:shadow-lg transition-shadow duration-300 border-green-200 hover:border-green-300">
             <CardHeader className="text-center pb-4">
               <div className="bg-green-100 p-3 rounded-full w-fit mx-auto mb-4">
@@ -76,6 +76,35 @@ const Index = () => {
               <Link to="/municipal-dashboard" className="block">
                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                   Access Municipal Dashboard
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow duration-300 border-orange-200 hover:border-orange-300 md:col-span-2 lg:col-span-1">
+            <CardHeader className="text-center pb-4">
+              <div className="bg-orange-100 p-3 rounded-full w-fit mx-auto mb-4">
+                <Truck className="h-8 w-8 text-orange-600" />
+              </div>
+              <CardTitle className="text-2xl text-orange-800">Driver Dashboard</CardTitle>
+              <CardDescription className="text-lg">
+                View assigned pickups and update collection status on the go
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Truck className="h-4 w-4" />
+                  <span>View assigned pickup routes</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Recycle className="h-4 w-4" />
+                  <span>Mark collections as completed</span>
+                </div>
+              </div>
+              <Link to="/driver-dashboard" className="block">
+                <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                  Access Driver Dashboard
                 </Button>
               </Link>
             </CardContent>
